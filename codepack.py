@@ -95,26 +95,35 @@ def create_project_structure(directory, ignore_patterns):
     Returns:
         str: A string representation of the project structure.
     """
-    structure = []
-    for root, dirs, files in os.walk(directory):
-        rel_root = os.path.relpath(root, directory)
-        if should_ignore(rel_root, ignore_patterns, directory):
-            continue
+    structure = ["# Project Structure"]
+    
+    def add_to_structure(path, prefix=''):
+        if should_ignore(path, ignore_patterns, directory):
+            return
+        
+        rel_path = os.path.relpath(path, directory)
+        name = os.path.basename(path)
+        
+        if os.path.isdir(path):
+            structure.append(f"{prefix}└── {name}")
+            items = sorted(os.listdir(path))
+            for i, item in enumerate(items):
+                item_path = os.path.join(path, item)
+                new_prefix = prefix + "    "
+                if i < len(items) - 1:
+                    new_prefix = prefix + "│   "
+                add_to_structure(item_path, new_prefix)
+        elif not is_binary_file(path):
+            structure.append(f"{prefix}├── {name}")
 
-        level = len(Path(rel_root).parts)
-        indent = '    ' * level
-        folder = os.path.basename(root)
-        
-        if level == 0:
-            structure.append(f"# Project Structure\n/{folder}")
+    structure.append(f"/{os.path.basename(directory)}")
+    items = sorted(os.listdir(directory))
+    for i, item in enumerate(items):
+        item_path = os.path.join(directory, item)
+        if i == len(items) - 1:
+            add_to_structure(item_path, "")
         else:
-            structure.append(f"{indent[:-4]}└── {folder}")
-        
-        subindent = '    ' * (level + 1)
-        for file in sorted(files):
-            file_path = os.path.join(root, file)
-            if not should_ignore(file_path, ignore_patterns, directory) and not is_binary_file(file_path):
-                structure.append(f"{subindent}├── {file}")
+            add_to_structure(item_path, "│")
     
     return '\n'.join(structure)
 
