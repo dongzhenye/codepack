@@ -48,24 +48,21 @@ The generated Markdown file will have a structure similar to this:
         └── file4.css
 
 # file1.py
-```python
-# Content of file1.py
-```
+
+Content of file1.py
 
 # file2.js
-```javascript
-// Content of file2.js
-```
+
+Content of file2.js
 
 # subdirectory/file3.html
-```html
-<!-- Content of file3.html -->
-```
+
+Content of file3.html
 
 # subdirectory/file4.css
-```css
-/* Content of file4.css */
-```
+​
+Content of file4.css
+
 ```
 
 ## Contributing
