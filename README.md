@@ -20,19 +20,34 @@ No additional dependencies are required!
 
 ## Usage
 
-Run CodePack from the command line with the following syntax:
+Here are some typical ways to use CodePack:
 
-```
-python codepack.py <input_directory> <output_file>
-```
+1. Pack the current directory:
+   ```
+   python codepack.py
+   ```
 
-For example:
+2. Pack a specific directory:
+   ```
+   python codepack.py /path/to/your/project
+   ```
 
-```
-python codepack.py /path/to/your/project /path/to/output/project_structure.md
-```
+3. Specify a custom output file:
+   ```
+   python codepack.py -o output.md
+   ```
 
-This will create a Markdown file named `project_structure.md` in the specified output location, containing the structure and content of all files in the input directory.
+4. Pack a specific directory with a custom output file:
+   ```
+   python codepack.py /path/to/your/project -o custom_name.md
+   ```
+
+Note: If no output file is specified, the script will create a Markdown file named after the processed directory.
+
+For more detailed information on script usage, run:
+```
+python codepack.py --help
+```
 
 ## Example Output
 

@@ -9,6 +9,7 @@ It's useful for code sharing and documentation purposes.
 
 import os
 import argparse
+from pathlib import Path
 
 def create_project_structure(directory):
     """
@@ -103,16 +104,28 @@ def main():
     and writes the output to a Markdown file.
     """
     parser = argparse.ArgumentParser(description="Pack a directory of code files into a single Markdown file.")
-    parser.add_argument("directory", help="Path to the directory to process")
-    parser.add_argument("output", help="Path for the output Markdown file")
+    parser.add_argument("directory", nargs='?', default='.', help="Path to the directory to process (default: current directory)")
+    parser.add_argument("-o", "--output", help="Path for the output Markdown file (default: {directory_name}.md in the current directory)")
     args = parser.parse_args()
 
-    markdown_content = create_markdown_content(args.directory)
+    # 处理目录路径
+    directory = Path(args.directory).expanduser().resolve()
+    if not directory.is_dir():
+        print(f"Error: {directory} is not a valid directory.")
+        return
+
+    # 处理输出文件路径
+    if args.output:
+        output_path = Path(args.output).expanduser().resolve()
+    else:
+        output_path = Path(f"{directory.name}.md")
+
+    markdown_content = create_markdown_content(str(directory))
     
-    with open(args.output, 'w', encoding='utf-8') as output_file:
+    with open(output_path, 'w', encoding='utf-8') as output_file:
         output_file.write(markdown_content)
     
-    print(f"Markdown file created successfully: {args.output}")
+    print(f"Markdown file created successfully: {output_path}")
 
 if __name__ == "__main__":
     main()
